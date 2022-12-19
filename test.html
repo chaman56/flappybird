@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flappy Bird</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+             
+        }
+        body{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: papayawhip;
+        }
+        .none {
+            display: none;
+        }
+        .container{
+            position: relative;
+            width: 400px;
+            height: 500px;
+        }
+        .sky{
+            position: absolute;
+            background-color: aqua;
+            background: url(images/background.webp)center no-repeat;
+            background-size: 1200px;
+            width: 400px;
+            height: 400px;
+        }
+        .ground{
+            z-index: 100;
+            width: 400px;
+            height: 100px;
+            background-color: brown;
+            background: url(images/ground-grass\ and\ dirt.PNG)center no-repeat;
+            background-size: 430px;
+            position: absolute;
+            top: 400px;
+        }
+        .bird {
+            position: absolute;
+            background: rgb(17, 255, 0);
+            background: url(images/bird1.png) center no-repeat;
+            background-size: 50px;
+            width: 50px;
+            height: 35px;
+            left: 50px;
+            bottom: 200px;
+        }
+        button{
+            position: absolute;
+            z-index: 110;
+            background: transparent;
+            width: 400px;
+            height: 500px;
+            display: flex;
+            justify-content: center;
+        }
+        .obstacle{
+            position: absolute;
+            width: 40px;
+            height: 200px;
+            background-color: green;
+            background: url(images/pipe1.png)center no-repeat;
+            background-size: 145px;
+            left: 400px;
+        }
+        .obstacle2{
+            position: absolute;
+            width: 40px;
+            height: 200px;
+            background-color: green;
+            background: url(images/pipe1.png)center no-repeat;
+            background-size: 145px;
+            left: 400px;
+        }
+        .score {
+        position: absolute;
+        z-index: 105;
+        text-shadow: 0 0 5px black;
+        }
+        #score2 {
+        text-align: center;
+        width: 40px;
+        background-color: palegreen;
+        font-size: 20px;
+        font-weight: bolder;
+        color: red;
+        }
+
+.gameover {
+    z-index: 102;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border: 1px solid black;
+    box-shadow: 0 2px 10px 5px rgba(116, 116, 116, 0.265);
+    position: absolute;
+    width: 190px;
+    height: 150px;
+    top: 125px;
+    left: 100px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.gameover img {
+    height: 20px;
+}
+.border1 {
+    z-index: 105;
+    position: absolute;
+    background-color: papayawhip;
+    width: 40px;
+    height: 500px;
+    top: 0;
+    left: -40px;
+}
+
+.border2 {
+    z-index: 105;
+    position: absolute;
+    background-color: papayawhip;
+    width: 40px;
+    height: 500px;
+    top: 0;
+    left: 400px;
+}
+    </style>
+</head>
+<body>
+    <div class="container"> 
+        <div class="sky">
+            <div class="score"> &nbsp; Score : <span id="score"></span></div>
+            <div class="bird" height="60px"></div>
+        </div>
+        <div class="ground"></div>
+        <div class="none" id="gameoverr"> Your score is<br><span id="score2"></span>
+            <br><img src="images/refresh (1).png" alt=""> Refresh the page to play again.
+        </div>
+        <div class="border1"></div>
+        <div class="border2"></div>
+        <button onclick="jump()"></button>
+    </div>
+    
+</body>
+<script>
+    hardness = 0;
+    var container = document.querySelector('.container');
+    var bird = document.querySelector('.bird');
+    bird.style.bottom = birdbottom + 'px';
+    var birdbottom = 200;
+    var y = 50;
+    var gravity = 2;
+    var scor = 0;
+    function fall(){
+        birdbottom -=2;
+        bird.style.bottom = birdbottom + 'px';
+        if (birdbottom <= 0) gameover()
+    }
+    var falling = setInterval(fall,30);
+    function jump(){
+        birdbottom += y;
+        bird.style.bottom = birdtop + 'px';
+    }
+    document.addEventListener('keyup', function (e){
+            if(e.keyCode){
+                birdbottom += y;
+                bird.style.bottom = birdbottom + 'px'; 
+            }
+    } )    
+    
+    function generate() {
+            var x = 400;
+            var t = Math.random() * 100
+            var obstacle = document.createElement('div')
+            obstacle.classList.add('obstacle')
+            obstacle.style.bottom = t + 'px';
+            container.appendChild(obstacle)
+
+            var obstacle2 = document.createElement('div')
+            obstacle2.classList.add('obstacle2')
+            obstacle2.style.bottom = t + 350 - hardness + 'px';
+            container.appendChild(obstacle2)
+            function moveobstacle() {
+                x -= gravity;
+                obstacle.style.left = x + 'px';
+                obstacle2.style.left = x + 'px';
+                if (x < -40) {
+                    container.removeChild(obstacle)
+                    container.removeChild(obstacle2)
+                }
+                if ((x < 100 & x > 10 & birdbottom +100< 200 + t) || (x < 100 & x > 10 & birdbottom + 135 > 350 -hardness+ t)) gameover()
+            }
+            var moving = setInterval(moveobstacle, 30)
+        }
+        generate()
+        var generating = setInterval(generate, 3000)
+        var check = 0;
+        function colorchange() {
+            if (check == 0) {
+                bird.style.backgroundImage = "url('images/bird1.png')"
+                check = 1;
+            }
+            else if (check == 1) {
+                bird.style.backgroundImage = "url('images/bird2.png')"
+                check = 0;
+            }
+        }
+        var changingcolor = setInterval(colorchange, 100)
+
+        function scorecounter() {
+            scor += 1;
+            var score = document.getElementById('score')
+            var score2 = document.getElementById('score2')
+            score.innerHTML = scor;
+            score2.innerHTML = scor;
+        }
+        var scoring = setInterval(scorecounter, 100)
+
+        function gameover() {
+            clearInterval(falling)
+            clearInterval(generating)
+            clearInterval(scoring)
+            gravity = 0;
+            y = 0;
+            check = 3;
+            document.getElementById("gameoverr").setAttribute("class", "gameover")
+        }    
+</script>
+</html>
