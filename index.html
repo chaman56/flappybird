@@ -12,6 +12,7 @@
              
         }
         body{
+            height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -21,6 +22,7 @@
             display: none;
         }
         .container{
+            overflow: hidden;
             position: relative;
             width: 400px;
             height: 500px;
@@ -154,12 +156,12 @@
     
 </body>
 <script>
-    hardness = 0;
+    hardness = 25;
     var container = document.querySelector('.container');
     var bird = document.querySelector('.bird');
     bird.style.bottom = birdbottom + 'px';
     var birdbottom = 200;
-    var y = 50;
+    var y = 48;
     var gravity = 2;
     var scor = 0;
     function fall(){
@@ -199,12 +201,12 @@
                     container.removeChild(obstacle)
                     container.removeChild(obstacle2)
                 }
-                if ((x < 100 & x > 10 & birdbottom +100< 200 + t) || (x < 100 & x > 10 & birdbottom + 135 > 350 -hardness+ t)) gameover()
+                if ((x < 100 & x > 10 & birdbottom +100< 200 + t) || (x < 100 & x > 10 & birdbottom + 135 > 350 - hardness+ t)) gameover()
             }
-            var moving = setInterval(moveobstacle, 30)
+            var moving = setInterval(moveobstacle, 20)
         }
         generate()
-        var generating = setInterval(generate, 3000)
+        var generating = setInterval(generate, 2500)
         var check = 0;
         function colorchange() {
             if (check == 0) {
@@ -224,6 +226,11 @@
             var score2 = document.getElementById('score2')
             score.innerHTML = scor;
             score2.innerHTML = scor;
+            if(scor>200) {hardness=30; y=43; }
+            if(scor>300) {hardness=40; y=39}
+            if(scor>400) {hardness=50; y=35}
+            if(scor>500) {hardness=60; y=31}
+            if(scor>600) {hardness=70;y=27}
         }
         var scoring = setInterval(scorecounter, 100)
 
